@@ -356,27 +356,28 @@ public class FileAlterationObserver implements Serializable {
      * @param currentEntries  The current list of files entries.
      */
     private void checkAndFire(final FileEntry parentEntry, final FileEntry[] previousEntries, final File[] currentEntries) {
-        int c = 0;
+        // REFACTOR: Renamed 'c' to 'currentEntryIndex' to reveal intent as index counter
+        int currentEntryIndex = 0;
         final FileEntry[] actualEntries = currentEntries.length > 0 ? new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
         for (final FileEntry previousEntry : previousEntries) {
-            while (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) > 0) {
-                actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
-                fireOnCreate(actualEntries[c]);
-                c++;
+            while (currentEntryIndex < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[currentEntryIndex]) > 0) {
+                actualEntries[currentEntryIndex] = createFileEntry(parentEntry, currentEntries[currentEntryIndex]);
+                fireOnCreate(actualEntries[currentEntryIndex]);
+                currentEntryIndex++;
             }
-            if (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) == 0) {
-                fireOnChange(previousEntry, currentEntries[c]);
-                checkAndFire(previousEntry, previousEntry.getChildren(), listFiles(currentEntries[c]));
-                actualEntries[c] = previousEntry;
-                c++;
+            if (currentEntryIndex < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[currentEntryIndex]) == 0) {
+                fireOnChange(previousEntry, currentEntries[currentEntryIndex]);
+                checkAndFire(previousEntry, previousEntry.getChildren(), listFiles(currentEntries[currentEntryIndex]));
+                actualEntries[currentEntryIndex] = previousEntry;
+                currentEntryIndex++;
             } else {
                 checkAndFire(previousEntry, previousEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
                 fireOnDelete(previousEntry);
             }
         }
-        for (; c < currentEntries.length; c++) {
-            actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
-            fireOnCreate(actualEntries[c]);
+        for (; currentEntryIndex < currentEntries.length; currentEntryIndex++) {
+            actualEntries[currentEntryIndex] = createFileEntry(parentEntry, currentEntries[currentEntryIndex]);
+            fireOnCreate(actualEntries[currentEntryIndex]);
         }
         parentEntry.setChildren(actualEntries);
     }

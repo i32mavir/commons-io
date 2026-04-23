@@ -2613,11 +2613,12 @@ public class IOUtils {
         while (remain > 0) {
             skipByteBuffer.position(0);
             skipByteBuffer.limit((int) Math.min(remain, DEFAULT_BUFFER_SIZE));
-            final int n = input.read(skipByteBuffer);
-            if (n == EOF) {
+            // REFACTOR: Renamed 'n' to 'bytesRead' to reveal intent clearly
+            final int bytesRead = input.read(skipByteBuffer);
+            if (bytesRead == EOF) {
                 break;
             }
-            remain -= n;
+            remain -= bytesRead;
         }
         return toSkip - remain;
     }
