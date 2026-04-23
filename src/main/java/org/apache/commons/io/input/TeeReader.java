@@ -113,11 +113,12 @@ public class TeeReader extends ProxyReader {
      */
     @Override
     public int read(final char[] chr) throws IOException {
-        final int n = super.read(chr);
-        if (n != EOF) {
-            branch.write(chr, 0, n);
+        // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+        final int charsRead = super.read(chr);
+        if (charsRead != EOF) {
+            branch.write(chr, 0, charsRead);
         }
-        return n;
+        return charsRead;
     }
 
     /**
@@ -131,11 +132,12 @@ public class TeeReader extends ProxyReader {
      */
     @Override
     public int read(final char[] chr, final int st, final int end) throws IOException {
-        final int n = super.read(chr, st, end);
-        if (n != EOF) {
-            branch.write(chr, st, n);
+        // REFACTOR: Renamed 'n' to 'charsRead'
+        final int charsRead = super.read(chr, st, end);
+        if (charsRead != EOF) {
+            branch.write(chr, st, charsRead);
         }
-        return n;
+        return charsRead;
     }
 
     /**
@@ -148,8 +150,9 @@ public class TeeReader extends ProxyReader {
     @Override
     public int read(final CharBuffer target) throws IOException {
         final int originalPosition = target.position();
-        final int n = super.read(target);
-        if (n != EOF) {
+        // REFACTOR: Renamed 'n' to 'charsRead'
+        final int charsRead = super.read(target);
+        if (charsRead != EOF) {
             // Appending can only be done after resetting the CharBuffer to the
             // right position and limit.
             final int newPosition = target.position();
@@ -162,7 +165,7 @@ public class TeeReader extends ProxyReader {
                 target.position(newPosition).limit(newLimit);
             }
         }
-        return n;
+        return charsRead;
     }
 
 }

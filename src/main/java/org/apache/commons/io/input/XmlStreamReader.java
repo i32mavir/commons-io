@@ -283,9 +283,10 @@ public class XmlStreamReader extends Reader {
     static String getContentTypeEncoding(final String httpContentType) {
         String encoding = null;
         if (httpContentType != null) {
-            final int i = httpContentType.indexOf(";");
-            if (i > -1) {
-                final String postMime = httpContentType.substring(i + 1);
+            // REFACTOR: Renamed 'i' to 'separatorIndex' for clarity
+            final int separatorIndex = httpContentType.indexOf(";");
+            if (separatorIndex > -1) {
+                final String postMime = httpContentType.substring(separatorIndex + 1);
                 final Matcher m = CHARSET_PATTERN.matcher(postMime);
                 encoding = m.find() ? m.group(1) : null;
                 encoding = encoding != null ? encoding.toUpperCase(Locale.ROOT) : null;
@@ -303,8 +304,9 @@ public class XmlStreamReader extends Reader {
     static String getContentTypeMime(final String httpContentType) {
         String mime = null;
         if (httpContentType != null) {
-            final int i = httpContentType.indexOf(";");
-            mime = i >= 0 ? httpContentType.substring(0, i) : httpContentType;
+            // REFACTOR: Renamed 'i' to 'separatorIndex' for clarity
+            final int separatorIndex = httpContentType.indexOf(";");
+            mime = separatorIndex >= 0 ? httpContentType.substring(0, separatorIndex) : httpContentType;
             mime = mime.trim();
         }
         return mime;

@@ -282,9 +282,10 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public int read() throws IOException {
         try {
             beforeRead(1);
-            final int b = in.read();
-            afterRead(b != EOF ? 1 : EOF);
-            return b;
+            // REFACTOR: Renamed 'b' to 'singleByteValue' to avoid confusion with parameter 'b' in other methods
+            final int singleByteValue = in.read();
+            afterRead(singleByteValue != EOF ? 1 : EOF);
+            return singleByteValue;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;
@@ -307,9 +308,10 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public int read(final byte[] b) throws IOException {
         try {
             beforeRead(IOUtils.length(b));
-            final int n = in.read(b);
-            afterRead(n);
-            return n;
+            // REFACTOR: Renamed 'n' to 'bytesRead' to clearly indicate number of bytes read
+            final int bytesRead = in.read(b);
+            afterRead(bytesRead);
+            return bytesRead;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;
@@ -334,9 +336,10 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public int read(final byte[] b, final int off, final int len) throws IOException {
         try {
             beforeRead(len);
-            final int n = in.read(b, off, len);
-            afterRead(n);
-            return n;
+            // REFACTOR: Renamed 'n' to 'bytesRead' to clearly indicate number of bytes read
+            final int bytesRead = in.read(b, off, len);
+            afterRead(bytesRead);
+            return bytesRead;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;

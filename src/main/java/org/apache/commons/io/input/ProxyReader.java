@@ -158,9 +158,10 @@ public abstract class ProxyReader extends FilterReader {
     public int read() throws IOException {
         try {
             beforeRead(1);
-            final int c = in.read();
-            afterRead(c != EOF ? 1 : EOF);
-            return c;
+            // REFACTOR: Renamed 'c' to 'charValue' for clarity
+            final int charValue = in.read();
+            afterRead(charValue != EOF ? 1 : EOF);
+            return charValue;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;
@@ -178,9 +179,10 @@ public abstract class ProxyReader extends FilterReader {
     public int read(final char[] chr) throws IOException {
         try {
             beforeRead(IOUtils.length(chr));
-            final int n = in.read(chr);
-            afterRead(n);
-            return n;
+            // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+            final int charsRead = in.read(chr);
+            afterRead(charsRead);
+            return charsRead;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;
@@ -200,9 +202,10 @@ public abstract class ProxyReader extends FilterReader {
     public int read(final char[] chr, final int st, final int len) throws IOException {
         try {
             beforeRead(len);
-            final int n = in.read(chr, st, len);
-            afterRead(n);
-            return n;
+            // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+            final int charsRead = in.read(chr, st, len);
+            afterRead(charsRead);
+            return charsRead;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;
@@ -221,9 +224,10 @@ public abstract class ProxyReader extends FilterReader {
     public int read(final CharBuffer target) throws IOException {
         try {
             beforeRead(IOUtils.length(target));
-            final int n = in.read(target);
-            afterRead(n);
-            return n;
+            // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+            final int charsRead = in.read(target);
+            afterRead(charsRead);
+            return charsRead;
         } catch (final IOException e) {
             handleIOException(e);
             return EOF;
