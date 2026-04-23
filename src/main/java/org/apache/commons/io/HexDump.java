@@ -111,7 +111,7 @@ public class HexDump {
                     "illegal index: " + index + " into array of length "
                     + data.length);
         }
-        long display_offset = offset + index;
+        long displayOffset = offset + index;
         final StringBuilder buffer = new StringBuilder(74);
 
         // TODO Use Objects.checkFromIndexSize(index, length, data.length) when upgrading to JDK9

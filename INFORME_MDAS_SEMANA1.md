@@ -180,18 +180,102 @@ El nuevo nombre `currentEntryIndex` es:
 - **Buscable:** se puede buscar así en todo el código
 - **Significativo:** revela el propósito en el contexto del método
 
-**Impacto:** Sin cambio semántico. Mejora significativa de legibilidad en método complejo.
+---
+
+### Cambio 4: HexDump.java - Bucles anidados con nombres claros
+**Archivo:** `src/main/java/org/apache/commons/io/HexDump.java`  
+**Línea:** 124 en adelante  
+**Regla Aplicada:** Evitar variables single-letter que no revelan intención
+
+**Cambios realizados:**
+- `j` → `byteOffset` (itera en grupos de 16 bytes)
+- `k` → `byteIndexInGroup` (índice dentro del grupo)
+- `chars_read` → `bytesInGroup` (claro que son bytes, no caracteres)
+- `display_offset` → `displayOffset` (camelCase)
+
+**Justificación:** En bucles anidados complejos que manipulan datos hexadecimales, nombres específicos como `byteOffset` y `byteIndexInGroup` comunican claramente el propósito de cada índice. El cambio de `chars_read` a `bytesInGroup` también corrige una imprecisión semántica.
+
+---
+
+### Cambio 5: AbstractByteArrayOutputStream.java - Variables de copia
+**Archivo:** `src/main/java/org/apache/commons/io/output/AbstractByteArrayOutputStream.java`  
+**Líneas:** 221, 267  
+**Regla Aplicada:** Nombres descriptivos para operaciones principales
+
+**Cambios realizados:**
+- `c` → `bytesToCopy` (en `toByteArray()`)
+- `c` → `bytesToInclude` (en `toInputStream()`)
+
+**Justificación:** La variable `c` es demasiado genérica. El nuevo nombre indica claramente qué cantidad de bytes se copiarán/incluirán en la iteración actual.
+
+---
+
+### Cambio 6: WriterOutputStream.java - Bytes a codificar
+**Archivo:** `src/main/java/org/apache/commons/io/output/WriterOutputStream.java`  
+**Línea:** 458  
+**Regla Aplicada:** Nombres reveladores de intención
+
+**Cambios realizados:**
+- `c` → `bytesToEncode`
+
+**Justificación:** `bytesToEncode` comunica claramente que en cada iteración se procesan esa cantidad de bytes para codificación.
+
+---
+
+### Cambio 7: ReaderInputStream.java - Bytes a leer
+**Archivo:** `src/main/java/org/apache/commons/io/input/ReaderInputStream.java`  
+**Línea:** 463  
+**Regla Aplicada:** Nombres pronunciables y significativos
+
+**Cambios realizados:**
+- `c` → `bytesToRead`
+
+**Justificación:** Similar a WriterOutputStream, `bytesToRead` es mucho más descriptivo en el contexto de lectura de bytes del buffer.
+
+---
+
+### Cambio 8: ReversedLinesFileReader.java - Búsqueda de secuencias
+**Archivo:** `src/main/java/org/apache/commons/io/input/ReversedLinesFileReader.java`  
+**Método:** `getNewLineMatchByteCount()`  
+**Línea:** 191-192  
+**Regla Aplicada:** Nombres buscables y significativos
+
+**Cambios realizados:**
+- `j` → `sequenceIndex`
+- `k` → `bufferIndex`
+
+**Justificación:** En un contexto de búsqueda de patrones complejos, `sequenceIndex` y `bufferIndex` son mucho más descriptivos que `j` y `k`. Ahora es claro que uno itera la secuencia y otro representa el índice en el buffer.
+
+---
+
+### Resumen de Refactorizaciones Realizadas
+
+| Archivo | Variable | Nuevo Nombre | Contexto |
+|---------|----------|--------------|----------|
+| IOUtils.java | n | bytesRead | Lectura de stream |
+| BOMInputStream.java | b | byteValue | Valor de byte en BOM |
+| FileAlterationObserver.java | c | currentEntryIndex | Índice en array de archivos |
+| HexDump.java | j | byteOffset | Offset en bloques de 16 |
+| HexDump.java | k | byteIndexInGroup | Índice dentro del grupo |
+| HexDump.java | chars_read | bytesInGroup | Bytes en grupo actual |
+| HexDump.java | j | hexDigitIndex | Iteración en dígitos hex |
+| AbstractByteArrayOutputStream.java | c | bytesToCopy | Bytes a copiar |
+| AbstractByteArrayOutputStream.java | c | bytesToInclude | Bytes para constructor |
+| WriterOutputStream.java | c | bytesToEncode | Bytes a codificar |
+| ReaderInputStream.java | c | bytesToRead | Bytes a leer |
+| ReversedLinesFileReader.java | j | sequenceIndex | Índice en secuencia |
+| ReversedLinesFileReader.java | k | bufferIndex | Índice en buffer |
 
 ---
 
 ### Verificación de Funcionalidad
 
 - [x] Compilación sin errores tras refactorización
-- [x] Todos los cambios registro en commit Git
+- [x] Todos los cambios registrados en commits Git
 - [x] Sin cambios en semántica del código
-- [x] Mejora en legibilidad y mantenibilidad
+- [x] Mejora significativa en legibilidad y mantenibilidad
 
-### Herramientas de IA Utilizadas
+
 
 **Herramienta:** GitHub Copilot (Claude Haiku 4.5)  
 **Versión:** Copilot Chat  
@@ -207,7 +291,11 @@ el contexto del código.
 ### Pendientes
 
 - [x] Aplicar cambios en archivos identificados
-- [ ] Aplicar cambios en HexDump.java (opcional - bucles dentro de bucles)
+- [x] Refactorizar nombres en HexDump.java (bucles anidados)
+- [x] Refactorizar nombres en AbstractByteArrayOutputStream.java
+- [x] Refactorizar nombres en WriterOutputStream.java
+- [x] Refactorizar nombres en ReaderInputStream.java
+- [x] Refactorizar nombres en ReversedLinesFileReader.java
 - [ ] Generar reporte PDF final con capturas
 
 ---
@@ -216,9 +304,11 @@ el contexto del código.
 
 ```
 9f28706d6 REFACTOR: Semana 1 - Nombres descriptivos (IOUtils, BOMInputStream, FileAlterationObserver)
+7b9bfed9e DOCS: Actualizar informe Semana 1 con ejemplos detallados y justificaciones
+ed01e3bff REFACTOR: Nombres descriptivos en HexDump, AbstractByteArrayOutputStream, WriterOutputStream, ReaderInputStream, ReversedLinesFileReader
 ```
 
 ---
 
 **Última actualización:** 23 de abril de 2026  
-**Estado:** ✅ SEMANA 1 COMPLETADA
+**Estado:** ✅ SEMANA 1 COMPLETADA - Refactorizaciones de Nomenclatura Finalizadas
