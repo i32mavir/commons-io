@@ -59,59 +59,137 @@ Se ha analizado el código fuente del proyecto Apache Commons IO identificando l
 
 ### Cambios Realizados
 
-#### Cambio 1: IOUtils.java - Variables de lectura de datos
+#### Cambio 1: IOUtils.java - Variable descriptiva para lectura de datos
+**Archivo:** `src/main/java/org/apache/commons/io/IOUtils.java`  
 **Línea:** 2616  
-**Regla Aplicada:** Nombres descriptivos que revelen intención  
+**Regla Aplicada:** Nombres descriptivos que revelen intención (Clean Code - Capítulo 2)
 
+**ANTES:**
 ```java
-// ANTES
 final int n = input.read(skipByteBuffer);
-
-// DESPUÉS  
-final int bytesRead = input.read(skipByteBuffer);
+if (n == EOF) {
+    break;
+}
+remain -= n;
 ```
 
-**Justificación:** El nombre `bytesRead` es mucho más claro que `n`, indicando que almacena el número de bytes leídos.
+**DESPUÉS:**
+```java
+// REFACTOR: Renamed 'n' to 'bytesRead' to reveal intent clearly
+final int bytesRead = input.read(skipByteBuffer);
+if (bytesRead == EOF) {
+    break;
+}
+remain -= bytesRead;
+```
+
+**Justificación:** El nombre de variable `n` es una letra aislada que no revela intención. El nuevo nombre `bytesRead` comunica claramente que almacena el número de bytes leídos del stream, mejorando significativamente la legibilidad del código.
+
+**Impacto:** Sin cambio semántico. Solo mejora la comprensión del código.
 
 ---
 
-#### Cambio 2: BOMInputStream.java - Variable de byte
+#### Cambio 2: BOMInputStream.java - Variable clara para lectura de bytes
+**Archivo:** `src/main/java/org/apache/commons/io/input/BOMInputStream.java`  
 **Línea:** 431  
 **Regla Aplicada:** Nombres pronunciables y descriptivos
 
+**ANTES:**
 ```java
-// ANTES
 int b = 0;
-
-// DESPUÉS
-int byteValue = 0;
+while (len > 0 && b >= 0) {
+    b = readFirstBytes();
+    if (b >= 0) {
+        buf[off++] = (byte) (b & 0xFF);
 ```
 
-**Justificación:** `byteValue` describe claramente que contendrá un valor de byte, mejorando la legibilidad.
+**DESPUÉS:**
+```java
+// REFACTOR: Renamed 'b' to 'byteValue' for clarity and descriptiveness
+int byteValue = 0;
+while (len > 0 && byteValue >= 0) {
+    byteValue = readFirstBytes();
+    if (byteValue >= 0) {
+        buf[off++] = (byte) (byteValue & 0xFF);
+```
+
+**Justificación:** La variable `b` es una abreviación que no cumple la regla de nombres pronunciables. `byteValue` es más descriptivo y comunica que contiene un valor de byte leído del BOM (Byte Order Mark).
+
+**Impacto:** Sin cambio semántico. Mejora la comprensión en contexto de BOM parsing.
 
 ---
 
-#### Cambio 3: FileAlterationObserver.java - Contador de eventos
-**Línea:** 359  
-**Regla Aplicada:** Nombres que revelen intención
+#### Cambio 3: FileAlterationObserver.java - Índice con nombre significativo
+**Archivo:** `src/main/java/org/apache/commons/io/monitor/FileAlterationObserver.java`  
+**Método:** `checkAndFire()`  
+**Líneas:** 359 en adelante  
+**Regla Aplicada:** Nombres buscables y significativos (Clean Code - Evitar variables single-letter excepto bucles)
 
+**ANTES:**
 ```java
-// ANTES
 int c = 0;
-
-// DESPUÉS
-int eventCount = 0;
+final FileEntry[] actualEntries = currentEntries.length > 0 ? 
+    new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+for (final FileEntry previousEntry : previousEntries) {
+    while (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) > 0) {
+        actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
+        fireOnCreate(actualEntries[c]);
+        c++;
+    }
+    if (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) == 0) {
+        // ... más código usando c
+    }
+}
+for (; c < currentEntries.length; c++) {
+    actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
+    fireOnCreate(actualEntries[c]);
+}
 ```
 
-**Justificación:** Basado en el contexto de observador de cambios en archivos, `eventCount` es más descriptivo que `c`.
+**DESPUÉS:**
+```java
+// REFACTOR: Renamed 'c' to 'currentEntryIndex' to reveal intent as index counter
+int currentEntryIndex = 0;
+final FileEntry[] actualEntries = currentEntries.length > 0 ? 
+    new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+for (final FileEntry previousEntry : previousEntries) {
+    while (currentEntryIndex < currentEntries.length && 
+           comparator.compare(previousEntry.getFile(), currentEntries[currentEntryIndex]) > 0) {
+        actualEntries[currentEntryIndex] = createFileEntry(parentEntry, currentEntries[currentEntryIndex]);
+        fireOnCreate(actualEntries[currentEntryIndex]);
+        currentEntryIndex++;
+    }
+    if (currentEntryIndex < currentEntries.length && 
+        comparator.compare(previousEntry.getFile(), currentEntries[currentEntryIndex]) == 0) {
+        // ... más código usando currentEntryIndex
+    }
+}
+for (; currentEntryIndex < currentEntries.length; currentEntryIndex++) {
+    actualEntries[currentEntryIndex] = createFileEntry(parentEntry, currentEntries[currentEntryIndex]);
+    fireOnCreate(actualEntries[currentEntryIndex]);
+}
+```
+
+**Justificación:** La variable `c` viola múltiples reglas de Clean Code:
+1. No es pronunciable
+2. No es buscable (la letra 'c' aparece en múltiples contextos)
+3. No revela intención en el contexto de comparación y sincronización de arrays
+
+El nuevo nombre `currentEntryIndex` es:
+- **Descriptivo:** comunica que es un índice
+- **Buscable:** se puede buscar así en todo el código
+- **Significativo:** revela el propósito en el contexto del método
+
+**Impacto:** Sin cambio semántico. Mejora significativa de legibilidad en método complejo.
 
 ---
 
 ### Verificación de Funcionalidad
 
 - [x] Compilación sin errores tras refactorización
-- [x] Tests ejecutados correctamente
+- [x] Todos los cambios registro en commit Git
 - [x] Sin cambios en semántica del código
+- [x] Mejora en legibilidad y mantenibilidad
 
 ### Herramientas de IA Utilizadas
 
@@ -128,10 +206,19 @@ el contexto del código.
 
 ### Pendientes
 
-- [ ] Aplicar cambios en más archivos
-- [ ] Generar report PDF final
+- [x] Aplicar cambios en archivos identificados
+- [ ] Aplicar cambios en HexDump.java (opcional - bucles dentro de bucles)
+- [ ] Generar reporte PDF final con capturas
+
+---
+
+### Commits Realizados
+
+```
+9f28706d6 REFACTOR: Semana 1 - Nombres descriptivos (IOUtils, BOMInputStream, FileAlterationObserver)
+```
 
 ---
 
 **Última actualización:** 23 de abril de 2026  
-**Estado:** En progreso
+**Estado:** ✅ SEMANA 1 COMPLETADA
