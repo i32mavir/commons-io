@@ -455,11 +455,12 @@ public class WriterOutputStream extends OutputStream {
     public void write(final byte[] b, int off, int len) throws IOException {
         IOUtils.checkFromIndexSize(b, off, len);
         while (len > 0) {
-            final int c = Math.min(len, decoderIn.remaining());
-            decoderIn.put(b, off, c);
+            // REFACTOR: Renamed 'c' to 'bytesToEncode' to clearly indicate bytes we'll encode this iteration
+            final int bytesToEncode = Math.min(len, decoderIn.remaining());
+            decoderIn.put(b, off, bytesToEncode);
             processInput(false);
-            len -= c;
-            off += c;
+            len -= bytesToEncode;
+            off += bytesToEncode;
         }
         if (writeImmediately) {
             flushOutput();

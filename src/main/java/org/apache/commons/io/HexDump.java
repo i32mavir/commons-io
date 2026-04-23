@@ -121,24 +121,28 @@ public class HexDump {
 
         final int endIndex = index + length;
 
-        for (int j = index; j < endIndex; j += 16) {
-            int chars_read = endIndex - j;
+        // REFACTOR: Renamed 'j' to 'byteOffset' and 'display_offset' to 'displayOffset' 
+        // to reveal intent and follow camelCase convention
+        for (int byteOffset = index; byteOffset < endIndex; byteOffset += 16) {
+            // REFACTOR: Renamed 'chars_read' to 'bytesInGroup' for accuracy and clarity
+            int bytesInGroup = endIndex - byteOffset;
 
-            if (chars_read > 16) {
-                chars_read = 16;
+            if (bytesInGroup > 16) {
+                bytesInGroup = 16;
             }
-            dump(buffer, display_offset).append(' ');
-            for (int k = 0; k < 16; k++) {
-                if (k < chars_read) {
-                    dump(buffer, data[k + j]);
+            dump(buffer, displayOffset).append(' ');
+            // REFACTOR: Renamed 'k' to 'byteIndexInGroup' to show it iterates bytes within the group
+            for (int byteIndexInGroup = 0; byteIndexInGroup < 16; byteIndexInGroup++) {
+                if (byteIndexInGroup < bytesInGroup) {
+                    dump(buffer, data[byteIndexInGroup + byteOffset]);
                 } else {
                     buffer.append("  ");
                 }
                 buffer.append(' ');
             }
-            for (int k = 0; k < chars_read; k++) {
-                if (data[k + j] >= ' ' && data[k + j] < 127) {
-                    buffer.append((char) data[k + j]);
+            for (int byteIndexInGroup = 0; byteIndexInGroup < bytesInGroup; byteIndexInGroup++) {
+                if (data[byteIndexInGroup + byteOffset] >= ' ' && data[byteIndexInGroup + byteOffset] < 127) {
+                    buffer.append((char) data[byteIndexInGroup + byteOffset]);
                 } else {
                     buffer.append('.');
                 }
@@ -146,7 +150,7 @@ public class HexDump {
             buffer.append(System.lineSeparator());
             appendable.append(buffer);
             buffer.setLength(0);
-            display_offset += chars_read;
+            displayOffset += bytesInGroup;
         }
     }
 
@@ -202,8 +206,9 @@ public class HexDump {
      * @return StringBuilder containing the dumped value.
      */
     private static StringBuilder dump(final StringBuilder builder, final byte value) {
-        for (int j = 0; j < 2; j++) {
-            builder.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
+        // REFACTOR: Renamed 'j' to 'hexDigitIndex' to clarify that it iterates through hex digits
+        for (int hexDigitIndex = 0; hexDigitIndex < 2; hexDigitIndex++) {
+            builder.append(HEX_CODES[value >> SHIFTS[hexDigitIndex + 6] & 15]);
         }
         return builder;
     }
@@ -216,8 +221,9 @@ public class HexDump {
      * @return StringBuilder containing the dumped value.
      */
     private static StringBuilder dump(final StringBuilder builder, final long value) {
-        for (int j = 0; j < 8; j++) {
-            builder.append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
+        // REFACTOR: Renamed 'j' to 'hexDigitIndex' to clarify that it iterates through hex digits
+        for (int hexDigitIndex = 0; hexDigitIndex < 8; hexDigitIndex++) {
+            builder.append(HEX_CODES[(int) (value >> SHIFTS[hexDigitIndex]) & 15]);
         }
         return builder;
     }
