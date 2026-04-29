@@ -51,17 +51,25 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     private static final OpenOption[] DEFAULT_OPEN_OPTIONS = PathUtils.EMPTY_OPEN_OPTION_ARRAY;
 
     /**
-     * The buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * The current buffer size requested by the user.
+     * Defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * <!-- REFACTOR: Clarified that this is the CURRENT/REQUESTED buffer size, distinct from bufferSizeDefault -->
      */
     private int bufferSize = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
-     * The buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * The default buffer size used when no explicit size is configured.
+     * Defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * This is the fallback value when bufferSize is not explicitly set.
+     * <!-- REFACTOR: Se aclaró que este es el tamaño DEFAULT del buffer, explicando su propósito como fallback -->
      */
     private int bufferSizeDefault = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
-     * The maximum buffer size.
+     * The maximum allowed buffer size to prevent memory abuse.
+     * Defaults to {@link Integer#MAX_VALUE}.
+     * This constraint is enforced by {@link #bufferSizeChecker}.
+     * <!-- REFACTOR: Se aclaró el propósito y se añadió referencia al mecanismo de cumplimiento -->
      */
     private int bufferSizeMax = DEFAULT_MAX_VALUE;
 

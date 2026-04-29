@@ -148,19 +148,19 @@ public class BOMInputStream extends ProxyInputStream {
         /**
          * Builds a new {@link BOMInputStream}.
          * <p>
-         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method 
+         * throws an exception.
          * </p>
-         * <p>
-         * This builder uses the following aspects: InputStream, OpenOption[], include, and ByteOrderMark[].
-         * </p>
-         * <p>
-         * This builder uses the following aspects:
-         * </p>
+         * <h2>Aspects Used by This Builder</h2>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
-         * <li>include}</li>
-         * <li>byteOrderMarks</li>
+         * <li>{@link #getInputStream()} - the input stream to wrap</li>
+         * <li>include - whether to include the BOM in the output</li>
+         * <li>byteOrderMarks - the BOMs to detect and optionally exclude</li>
          * </ul>
+         * <!-- REFACTOR: Se eliminó documentación duplicada y mejora la claridad:
+         *      1. Reformateo de líneas largas para mejorar legibilidad
+         *      2. Uso de encabezados de sección para organización
+         *      3. Eliminación de párrafo duplicado "This builder uses the following aspects" -->
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

@@ -221,13 +221,24 @@ public class FileUtils {
     public static final File[] EMPTY_FILE_ARRAY = {};
 
     /**
-     * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
+     * Returns a human-readable version of the file size, where the input represents a specific 
+     * number of bytes.
      * <p>
-     * If the size is over 1GB, the size is returned as the number of whole GB, the size is rounded down to the
-     * nearest GB boundary.
+     * If the size is over 1GB, the size is returned as the number of whole GB, the size is 
+     * rounded down to the nearest GB boundary.
      * </p>
      * <p>
      * Similarly for the 1MB and 1KB boundaries.
+     * </p>
+     * <h2>Implementation Strategy: Cascading Conditions</h2>
+     * <p>
+     * This method uses cascading if-else statements rather than a loop because:
+     * <ul>
+     * <li><strong>Performance:</strong> The number of units is fixed (8 levels from bytes to quettabytes),
+     *     making explicit conditions faster than dynamic calculations.</li>
+     * <li><strong>Predictability:</strong> Most files fall into a few common categories (bytes, KB, MB, GB),
+     *     so branch prediction favors this approach.</li>
+     * </ul>
      * </p>
      *
      * @param size the number of bytes.
@@ -235,6 +246,8 @@ public class FileUtils {
      * @throws NullPointerException if the given {@link BigInteger} is {@code null}.
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      * @since 2.4
+     * <!-- REFACTOR: Se expandió javadoc con justificación de diseño explicando por qué se usan 
+     *      condiciones en cascada en lugar de bucles, mejorando mantenibilidad y comprensión del código -->
      */
     // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
     public static String byteCountToDisplaySize(final BigInteger size) {

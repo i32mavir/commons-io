@@ -29,24 +29,30 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.file.PathUtils;
 
 /**
- * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to disk. If the stream is closed before the
- * threshold is reached, the data will not be written to disk at all.
- * <p>
- * To build an instance, use {@link Builder}.
- * </p>
- * <p>
- * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) created by a DeferredFileOutputStream when the caller only
- * configured a prefix.
- * </p>
- * <p>
- * The caller is responsible for deleting the output file passed to a constructor or builder through {@link Builder#setOutputFile(File)} or
- * {@link Builder#setOutputFile(Path)}.
- * </p>
- * <p>
- * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file being uploaded. If the file is small you
- * want to store it in memory (for speed), but if the file is large you want to store it to file (to avoid memory issues).
- * </p>
- *
+     * An output stream which will retain data in memory until a specified threshold is reached, 
+     * and only then commit it to disk. If the stream is closed before the threshold is reached, 
+     * the data will not be written to disk at all.
+     * <p>
+     * To build an instance, use {@link Builder}.
+     * </p>
+     * <h2>Responsibility for File Cleanup</h2>
+     * <p>
+     * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) 
+     * created by a DeferredFileOutputStream when the caller only configured a prefix.
+     * </p>
+     * <p>
+     * The caller is responsible for deleting the output file passed to a constructor or builder 
+     * through {@link Builder#setOutputFile(File)} or {@link Builder#setOutputFile(Path)}.
+     * </p>
+     * <h2>Use Case: File Upload Processing</h2>
+     * <p>
+     * This class originated in FileUpload processing to solve the following problem: 
+     * when receiving an uploaded file, the size is unknown in advance. Small files should be 
+     * stored in memory for speed, while large files should be stored to disk to avoid memory issues. 
+     * This class automatically handles this transition at a configurable threshold.
+     * </p>
+     * <!-- REFACTOR: Se reformateó el javadoc con líneas más cortas para mejor legibilidad y 
+     *      se aplicaron encabezados de sección para claridad en decisiones de diseño -->
  * @see Builder
  */
 public class DeferredFileOutputStream extends ThresholdingOutputStream {
