@@ -266,9 +266,91 @@ El nuevo nombre `currentEntryIndex` es:
 | ReversedLinesFileReader.java | j | sequenceIndex | Índice en secuencia |
 | ReversedLinesFileReader.java | k | bufferIndex | Índice en buffer |
 
+### Cambio 9: ProxyInputStream.java - Renombrar variables de lectura
+**Archivo:** `src/main/java/org/apache/commons/io/input/ProxyInputStream.java`  
+**Método:** `read()` (3 overloads)  
+**Regla Aplicada:** Evitar nombres ambiguos y confusos
+
+**Cambios realizados:**
+- `b` → `singleByteValue` (en `read()`)
+- `n` → `bytesRead` (en `read(byte[])` y `read(byte[], int, int)`)
+
+**Justificación:** El parámetro `b` en otros métodos es array, por lo que usar `b` como variable local causa confusión. `singleByteValue` es claro. Similarmente, `bytesRead` comunica el propósito.
+
 ---
 
-### Verificación de Funcionalidad
+### Cambio 10: TeeInputStream.java - Lectura con bifurcación
+**Archivo:** `src/main/java/org/apache/commons/io/input/TeeInputStream.java`  
+**Línea:** 127, 146  
+**Regla Aplicada:** Nombres que revelen intención
+
+**Cambios realizados:**
+- `n` → `bytesRead`
+
+**Justificación:** En un Stream que bifurca datos, `bytesRead` indica claramente cuántos bytes se leyeron en cada iteración.
+
+---
+
+### Cambio 11: TeeReader.java - Lectura con bifurcación de caracteres
+**Archivo:** `src/main/java/org/apache/commons/io/input/TeeReader.java`  
+**Línea:** 116, 134, 151  
+**Regla Aplicada:** Nombres específicos del tipo de dato
+
+**Cambios realizados:**
+- `n` → `charsRead` (para distinguir de bytes vs caracteres)
+
+**Justificación:** Usar `charsRead` en lugar de `bytesRead` comunica que se trata de caracteres, no bytes.
+
+---
+
+### Cambio 12: CharSequenceReader.java - Lectura de caracteres
+**Archivo:** `src/main/java/org/apache/commons/io/input/CharSequenceReader.java`  
+**Línea:** 243  
+**Regla Aplicada:** Nombres pronunciables y significativos
+
+**Cambios realizados:**
+- `c` → `currentChar`
+
+**Justificación:** En un bucle que lee caracteres individuales, `currentChar` es mucho más claro que `c`.
+
+---
+
+### Cambio 13: XmlStreamReader.java - Búsqueda de separador
+**Archivo:** `src/main/java/org/apache/commons/io/input/XmlStreamReader.java`  
+**Línea:** 286, 306  
+**Regla Aplicada:** Nombres buscables
+
+**Cambios realizados:**
+- `i` → `separatorIndex`
+
+**Justificación:** En métodos que procesan content-type HTTP, buscar el índice del separador. `separatorIndex` es mucho más específico que `i`.
+
+---
+
+### Cambio 14: ProxyReader.java - Lectura de caracteres
+**Archivo:** `src/main/java/org/apache/commons/io/input/ProxyReader.java`  
+**Línea:** 161, 181, 203, 224  
+**Regla Aplicada:** Evitar single-letters
+
+**Cambios realizados:**
+- `c` → `charValue` (en `read()`)
+- `n` → `charsRead` (en otros métodos)
+
+**Justificación:** Similar a ProxyInputStream pero para caracteres.
+
+---
+
+### Cambio 15: FileUtils.java - Decodificación de URL
+**Archivo:** `src/main/java/org/apache/commons/io/FileUtils.java`  
+**Línea:** 1202 en adelante  
+**Regla Aplicada:** Nombres que revelen intención
+
+**Cambios realizados:**
+- `n` → `urlLength`
+
+**Justificación:** En el contexto de decodificación de URLs, `urlLength` es mucho más claro que `n`.
+
+---
 
 - [x] Compilación sin errores tras refactorización
 - [x] Todos los cambios registrados en commits Git
