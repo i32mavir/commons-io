@@ -460,7 +460,7 @@ public class ReaderInputStream extends AbstractInputStream {
         int read = 0;
         while (len > 0) {
             if (encoderOut.hasRemaining()) { // Data from the last read not fully copied
-                // REFACTOR: Renamed 'c' to 'bytesToRead' to indicate bytes we'll read this iteration
+                // REFACTOR: Se renombró 'c' a 'bytesToRead' para indicar los bytes que leeremos esta iteración
                 final int bytesToRead = Math.min(encoderOut.remaining(), len);
                 encoderOut.get(array, off, bytesToRead);
                 off += bytesToRead;

@@ -240,7 +240,7 @@ public class CharSequenceReader extends Reader implements Serializable {
 
         int count = 0;
         for (int i = 0; i < length; i++) {
-            // REFACTOR: Renamed 'c' to 'currentChar' to indicate current character value
+            // REFACTOR: Se renombró 'c' a 'currentChar' para indicar el valor de carácter actual
             final int currentChar = read();
             if (currentChar == EOF) {
                 return count;

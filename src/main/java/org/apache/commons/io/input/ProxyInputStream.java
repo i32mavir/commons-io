@@ -282,7 +282,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public int read() throws IOException {
         try {
             beforeRead(1);
-            // REFACTOR: Renamed 'b' to 'singleByteValue' to avoid confusion with parameter 'b' in other methods
+            // REFACTOR: Se renombró 'b' a 'singleByteValue' para evitar confusión con parámetro 'b' en otros métodos
             final int singleByteValue = in.read();
             afterRead(singleByteValue != EOF ? 1 : EOF);
             return singleByteValue;
@@ -308,7 +308,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public int read(final byte[] b) throws IOException {
         try {
             beforeRead(IOUtils.length(b));
-            // REFACTOR: Renamed 'n' to 'bytesRead' to clearly indicate number of bytes read
+            // REFACTOR: Se renombró 'n' a 'bytesRead' para indicar claramente el número de bytes leídos
             final int bytesRead = in.read(b);
             afterRead(bytesRead);
             return bytesRead;
@@ -336,7 +336,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public int read(final byte[] b, final int off, final int len) throws IOException {
         try {
             beforeRead(len);
-            // REFACTOR: Renamed 'n' to 'bytesRead' to clearly indicate number of bytes read
+            // REFACTOR: Se renombró 'n' a 'bytesRead' para indicar claramente el número de bytes leídos
             final int bytesRead = in.read(b, off, len);
             afterRead(bytesRead);
             return bytesRead;

@@ -283,7 +283,7 @@ public class XmlStreamReader extends Reader {
     static String getContentTypeEncoding(final String httpContentType) {
         String encoding = null;
         if (httpContentType != null) {
-            // REFACTOR: Renamed 'i' to 'separatorIndex' for clarity
+            // REFACTOR: Se renombró 'i' a 'separatorIndex' para claridad
             final int separatorIndex = httpContentType.indexOf(";");
             if (separatorIndex > -1) {
                 final String postMime = httpContentType.substring(separatorIndex + 1);
@@ -304,7 +304,7 @@ public class XmlStreamReader extends Reader {
     static String getContentTypeMime(final String httpContentType) {
         String mime = null;
         if (httpContentType != null) {
-            // REFACTOR: Renamed 'i' to 'separatorIndex' for clarity
+            // REFACTOR: Se renombró 'i' a 'separatorIndex' para claridad
             final int separatorIndex = httpContentType.indexOf(";");
             mime = separatorIndex >= 0 ? httpContentType.substring(0, separatorIndex) : httpContentType;
             mime = mime.trim();

@@ -1,3 +1,20 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
 # Informe de Prácticas MDAS - Bloque II: Código Limpio y Refactorización
 ## Proyecto: Apache Commons IO
 
@@ -75,7 +92,7 @@ remain -= n;
 
 **DESPUÉS:**
 ```java
-// REFACTOR: Renamed 'n' to 'bytesRead' to reveal intent clearly
+// REFACTOR: Se renombró 'n' a 'bytesRead' para revelar la intención claramente
 final int bytesRead = input.read(skipByteBuffer);
 if (bytesRead == EOF) {
     break;
@@ -105,7 +122,7 @@ while (len > 0 && b >= 0) {
 
 **DESPUÉS:**
 ```java
-// REFACTOR: Renamed 'b' to 'byteValue' for clarity and descriptiveness
+// REFACTOR: Se renombró 'b' a 'byteValue' para mayor claridad y descriptividad
 int byteValue = 0;
 while (len > 0 && byteValue >= 0) {
     byteValue = readFirstBytes();
@@ -148,7 +165,7 @@ for (; c < currentEntries.length; c++) {
 
 **DESPUÉS:**
 ```java
-// REFACTOR: Renamed 'c' to 'currentEntryIndex' to reveal intent as index counter
+// REFACTOR: Se renombró 'c' a 'currentEntryIndex' para revelar la intención como contador de índice
 int currentEntryIndex = 0;
 final FileEntry[] actualEntries = currentEntries.length > 0 ? 
     new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
@@ -392,5 +409,5 @@ ed01e3bff REFACTOR: Nombres descriptivos en HexDump, AbstractByteArrayOutputStre
 
 ---
 
-**Última actualización:** 23 de abril de 2026  
+**Última actualización:** 8 de mayo de 2026  
 **Estado:** ✅ SEMANA 1 COMPLETADA - Refactorizaciones de Nomenclatura Finalizadas

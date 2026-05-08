@@ -1381,10 +1381,34 @@ public class IOUtils {
     }
 
     /**
+     * Validates that the copy parameters are valid.
+     * <!-- REFACTOR: Método auxiliar que maneja SOLO validación de parámetros de copia.
+     *      Cumple regla Semana 3: Una única responsabilidad por función -->
+     *
+     * @param inputStream  the {@link InputStream} to read.
+     * @param outputStream the {@link OutputStream} to write to.
+     * @param bufferSize   the buffer size to use.
+     * @throws NullPointerException if inputStream or outputStream is {@code null}.
+     * @throws IllegalArgumentException if bufferSize is not positive.
+     */
+    private static void validateCopyParameters(final InputStream inputStream, final OutputStream outputStream, final int bufferSize) {
+        if (inputStream == null) {
+            throw new NullPointerException("InputStream es nulo");
+        }
+        if (outputStream == null) {
+            throw new NullPointerException("OutputStream es nulo");
+        }
+        if (bufferSize <= 0) {
+            throw new IllegalArgumentException("bufferSize debe ser positivo: " + bufferSize);
+        }
+    }
+
+    /**
      * Copies bytes from an {@link InputStream} to an {@link OutputStream} using an internal buffer of the given size.
      * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
+     * <!-- REFACTOR: Método que orquesta validación y copia. Delegación de responsabilidades (Semana 3) -->
      *
      * @param inputStream  the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write to.
@@ -1396,6 +1420,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static long copy(final InputStream inputStream, final OutputStream outputStream, final int bufferSize) throws IOException {
+        validateCopyParameters(inputStream, outputStream, bufferSize);
         return copyLarge(inputStream, outputStream, byteArray(bufferSize));
     }
 
@@ -2613,7 +2638,7 @@ public class IOUtils {
         while (remain > 0) {
             skipByteBuffer.position(0);
             skipByteBuffer.limit((int) Math.min(remain, DEFAULT_BUFFER_SIZE));
-            // REFACTOR: Renamed 'n' to 'bytesRead' to reveal intent clearly
+            // REFACTOR: Se renombró 'n' a 'bytesRead' para revelar la intención claramente
             final int bytesRead = input.read(skipByteBuffer);
             if (bytesRead == EOF) {
                 break;

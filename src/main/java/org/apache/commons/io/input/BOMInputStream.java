@@ -428,7 +428,7 @@ public class BOMInputStream extends ProxyInputStream {
             return 0;
         }
         int firstCount = 0;
-        // REFACTOR: Renamed 'b' to 'byteValue' for clarity and descriptiveness
+        // REFACTOR: Se renombró 'b' a 'byteValue' para mayor claridad y descriptividad
         int byteValue = 0;
         while (len > 0 && byteValue >= 0) {
             byteValue = readFirstBytes();

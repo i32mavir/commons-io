@@ -113,7 +113,7 @@ public class TeeReader extends ProxyReader {
      */
     @Override
     public int read(final char[] chr) throws IOException {
-        // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+        // REFACTOR: Se renombró 'n' a 'charsRead' para claridad
         final int charsRead = super.read(chr);
         if (charsRead != EOF) {
             branch.write(chr, 0, charsRead);
@@ -132,7 +132,7 @@ public class TeeReader extends ProxyReader {
      */
     @Override
     public int read(final char[] chr, final int st, final int end) throws IOException {
-        // REFACTOR: Renamed 'n' to 'charsRead'
+        // REFACTOR: Se renombró 'n' a 'charsRead'
         final int charsRead = super.read(chr, st, end);
         if (charsRead != EOF) {
             branch.write(chr, st, charsRead);
@@ -150,7 +150,7 @@ public class TeeReader extends ProxyReader {
     @Override
     public int read(final CharBuffer target) throws IOException {
         final int originalPosition = target.position();
-        // REFACTOR: Renamed 'n' to 'charsRead'
+        // REFACTOR: Se renombró 'n' a 'charsRead'
         final int charsRead = super.read(target);
         if (charsRead != EOF) {
             // Appending can only be done after resetting the CharBuffer to the

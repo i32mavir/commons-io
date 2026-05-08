@@ -356,7 +356,7 @@ public class FileAlterationObserver implements Serializable {
      * @param currentEntries  The current list of files entries.
      */
     private void checkAndFire(final FileEntry parentEntry, final FileEntry[] previousEntries, final File[] currentEntries) {
-        // REFACTOR: Renamed 'c' to 'currentEntryIndex' to reveal intent as index counter
+        // REFACTOR: Se renombró 'c' a 'currentEntryIndex' para revelar la intención como contador de índice
         int currentEntryIndex = 0;
         final FileEntry[] actualEntries = currentEntries.length > 0 ? new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
         for (final FileEntry previousEntry : previousEntries) {

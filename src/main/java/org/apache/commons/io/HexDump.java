@@ -121,17 +121,17 @@ public class HexDump {
 
         final int endIndex = index + length;
 
-        // REFACTOR: Renamed 'j' to 'byteOffset' and 'display_offset' to 'displayOffset' 
+        // REFACTOR: Se renombró 'j' a 'byteOffset' y 'display_offset' a 'displayOffset' 
         // to reveal intent and follow camelCase convention
         for (int byteOffset = index; byteOffset < endIndex; byteOffset += 16) {
-            // REFACTOR: Renamed 'chars_read' to 'bytesInGroup' for accuracy and clarity
+            // REFACTOR: Se renombró 'chars_read' a 'bytesInGroup' para precisión y claridad
             int bytesInGroup = endIndex - byteOffset;
 
             if (bytesInGroup > 16) {
                 bytesInGroup = 16;
             }
             dump(buffer, displayOffset).append(' ');
-            // REFACTOR: Renamed 'k' to 'byteIndexInGroup' to show it iterates bytes within the group
+            // REFACTOR: Se renombró 'k' a 'byteIndexInGroup' para mostrar que itera sobre bytes dentro del grupo
             for (int byteIndexInGroup = 0; byteIndexInGroup < 16; byteIndexInGroup++) {
                 if (byteIndexInGroup < bytesInGroup) {
                     dump(buffer, data[byteIndexInGroup + byteOffset]);
@@ -206,7 +206,7 @@ public class HexDump {
      * @return StringBuilder containing the dumped value.
      */
     private static StringBuilder dump(final StringBuilder builder, final byte value) {
-        // REFACTOR: Renamed 'j' to 'hexDigitIndex' to clarify that it iterates through hex digits
+        // REFACTOR: Se renombró 'j' a 'hexDigitIndex' para aclarar que itera sobre dígitos hexadecimales
         for (int hexDigitIndex = 0; hexDigitIndex < 2; hexDigitIndex++) {
             builder.append(HEX_CODES[value >> SHIFTS[hexDigitIndex + 6] & 15]);
         }
@@ -221,7 +221,7 @@ public class HexDump {
      * @return StringBuilder containing the dumped value.
      */
     private static StringBuilder dump(final StringBuilder builder, final long value) {
-        // REFACTOR: Renamed 'j' to 'hexDigitIndex' to clarify that it iterates through hex digits
+        // REFACTOR: Se renombró 'j' a 'hexDigitIndex' para aclarar que itera sobre dígitos hexadecimales
         for (int hexDigitIndex = 0; hexDigitIndex < 8; hexDigitIndex++) {
             builder.append(HEX_CODES[(int) (value >> SHIFTS[hexDigitIndex]) & 15]);
         }

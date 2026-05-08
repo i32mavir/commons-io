@@ -188,9 +188,9 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         private int getNewLineMatchByteCount(final byte[] data, final int i) {
             for (final byte[] newLineSequence : newLineSequences) {
                 boolean match = true;
-                // REFACTOR: Renamed 'j' to 'sequenceIndex' to clarify iteration through newline sequence
+                // REFACTOR: Se renombró 'j' a 'sequenceIndex' para aclarar la iteración a través de la secuencia de nueva línea
                 for (int sequenceIndex = newLineSequence.length - 1; sequenceIndex >= 0; sequenceIndex--) {
-                    // REFACTOR: Renamed 'k' to 'bufferIndex' to show it points to position in data buffer
+                    // REFACTOR: Se renombró 'k' a 'bufferIndex' para mostrar que apunta a una posición en el buffer de datos
                     final int bufferIndex = i + sequenceIndex - (newLineSequence.length - 1);
                     match &= bufferIndex >= 0 && data[bufferIndex] == newLineSequence[sequenceIndex];
                 }

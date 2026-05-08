@@ -124,7 +124,7 @@ public class TeeInputStream extends ProxyInputStream {
      */
     @Override
     public int read(final byte[] bts) throws IOException {
-        // REFACTOR: Renamed 'n' to 'bytesRead' for clarity
+        // REFACTOR: Se renombró 'n' a 'bytesRead' para claridad
         final int bytesRead = super.read(bts);
         if (bytesRead != EOF) {
             branch.write(bts, 0, bytesRead);
@@ -144,7 +144,7 @@ public class TeeInputStream extends ProxyInputStream {
      */
     @Override
     public int read(final byte[] bts, final int st, final int end) throws IOException {
-        // REFACTOR: Renamed 'n' to 'bytesRead' and parameters 'st'/'end' to 'startOffset'/'length'
+        // REFACTOR: Se renombró 'n' a 'bytesRead' y parámetros 'st'/'end' a 'startOffset'/'length'
         final int bytesRead = super.read(bts, st, end);
         if (bytesRead != EOF) {
             branch.write(bts, st, bytesRead);

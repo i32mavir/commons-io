@@ -158,7 +158,7 @@ public abstract class ProxyReader extends FilterReader {
     public int read() throws IOException {
         try {
             beforeRead(1);
-            // REFACTOR: Renamed 'c' to 'charValue' for clarity
+            // REFACTOR: Se renombró 'c' a 'charValue' para claridad
             final int charValue = in.read();
             afterRead(charValue != EOF ? 1 : EOF);
             return charValue;
@@ -179,7 +179,7 @@ public abstract class ProxyReader extends FilterReader {
     public int read(final char[] chr) throws IOException {
         try {
             beforeRead(IOUtils.length(chr));
-            // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+            // REFACTOR: Se renombró 'n' a 'charsRead' para claridad
             final int charsRead = in.read(chr);
             afterRead(charsRead);
             return charsRead;
@@ -202,7 +202,7 @@ public abstract class ProxyReader extends FilterReader {
     public int read(final char[] chr, final int st, final int len) throws IOException {
         try {
             beforeRead(len);
-            // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+            // REFACTOR: Se renombró 'n' a 'charsRead' para claridad
             final int charsRead = in.read(chr, st, len);
             afterRead(charsRead);
             return charsRead;
@@ -224,7 +224,7 @@ public abstract class ProxyReader extends FilterReader {
     public int read(final CharBuffer target) throws IOException {
         try {
             beforeRead(IOUtils.length(target));
-            // REFACTOR: Renamed 'n' to 'charsRead' for clarity
+            // REFACTOR: Se renombró 'n' a 'charsRead' para claridad
             final int charsRead = in.read(target);
             afterRead(charsRead);
             return charsRead;

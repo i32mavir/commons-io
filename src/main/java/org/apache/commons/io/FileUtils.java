@@ -1212,7 +1212,7 @@ public class FileUtils {
     static String decodeUrl(final String url) {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {
-            // REFACTOR: Renamed 'n' to 'urlLength' for clarity
+            // REFACTOR: Se renombró 'n' a 'urlLength' para mayor claridad
             final int urlLength = url.length();
             final StringBuilder builder = new StringBuilder();
             final ByteBuffer byteBuffer = ByteBuffer.allocate(urlLength);
@@ -2424,9 +2424,42 @@ public class FileUtils {
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well.
      * @return a collection of {@link File} with the matching files.
+     * <!-- REFACTOR: Se mantiene parámetro booleano por compatibilidad. 
+     *      Considerar usar listFilesNonRecursive() o listFilesRecursively() para mayor claridad (Semana 3) -->
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
         return listFiles(directory, new ArrayList<>(), recursive, extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE);
+    }
+
+    /**
+     * Lists files within a given directory (non-recursive) which match an array of extensions.
+     * <!-- REFACTOR: Nuevo método que elimina parámetro booleano para mayor claridad.
+     *      Cumple regla Semana 3: nombres explícitos sin parámetros ocultos -->
+     *
+     * @param directory  The directory to search (only direct children, no subdirectories).
+     * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
+     *                   parameter is {@code null}, all files are returned.
+     * @return a collection of {@link File} with the matching files in the directory only.
+     * @since 2.13.0
+     */
+    public static Collection<File> listFilesNonRecursive(final File directory, final String[] extensions) {
+        return listFiles(directory, extensions, false);
+    }
+
+    /**
+     * Lists files within a given directory and all its subdirectories (recursively) 
+     * which match an array of extensions.
+     * <!-- REFACTOR: Nuevo método que elimina parámetro booleano para mayor claridad.
+     *      Cumple regla Semana 3: nombres explícitos sin parámetros ocultos -->
+     *
+     * @param directory  The directory to search (including all subdirectories).
+     * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
+     *                   parameter is {@code null}, all files are returned.
+     * @return a collection of {@link File} with the matching files in the directory and subdirectories.
+     * @since 2.13.0
+     */
+    public static Collection<File> listFilesRecursively(final File directory, final String[] extensions) {
+        return listFiles(directory, extensions, true);
     }
 
     /**

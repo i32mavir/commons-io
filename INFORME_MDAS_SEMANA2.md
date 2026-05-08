@@ -1,3 +1,20 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
 # Informe de Prácticas MDAS - Bloque II: Código Limpio y Refactorización
 ## Proyecto: Apache Commons IO
 
@@ -82,22 +99,19 @@ Se ha analizado el código fuente del proyecto Apache Commons IO identificando l
 **ANTES:**
 ```javadoc
 /**
- * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to disk. If the stream is closed before the
- * threshold is reached, the data will not be written to disk at all.
+ * Flujo de salida que retendrá datos en memoria hasta que se alcance un umbral especificado, y solo entonces lo confirmará en disco. Si el flujo se cierra antes de que se alcance el umbral, los datos no se escribirán en disco en absoluto.
  * <p>
- * To build an instance, use {@link Builder}.
+ * Para construir una instancia, use {@link Builder}.
  * </p>
  * <p>
- * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) created by a DeferredFileOutputStream when the caller only
- * configured a prefix.
+ * El llamador es responsable de eliminar el archivo de salida ({@link #getFile()}, {@link #getPath()}) creado por DeferredFileOutputStream cuando el llamador solo configuró un prefijo.
  * </p>
  * <p>
- * The caller is responsible for deleting the output file passed to a constructor or builder through {@link Builder#setOutputFile(File)} or
+ * El llamador es responsable de eliminar el archivo de salida pasado a un constructor o constructor a través de {@link Builder#setOutputFile(File)} o
  * {@link Builder#setOutputFile(Path)}.
  * </p>
  * <p>
- * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file being uploaded. If the file is small you
- * want to store it in memory (for speed), but if the file is large you want to store it to file (to avoid memory issues).
+ * Esta clase se originó en el procesamiento de FileUpload. En este caso de uso, no conoce por adelantado el tamaño del archivo siendo cargado. Si el archivo es pequeño desea almacenarlo en memoria (por velocidad), pero si el archivo es grande desea almacenarlo en archivo (para evitar problemas de memoria).
  * </p>
  *
  * @see Builder
@@ -107,30 +121,31 @@ Se ha analizado el código fuente del proyecto Apache Commons IO identificando l
 **DESPUÉS:**
 ```javadoc
 /**
- * An output stream which will retain data in memory until a specified threshold is reached, 
- * and only then commit it to disk. If the stream is closed before the threshold is reached, 
- * the data will not be written to disk at all.
+ * Flujo de salida que retendrá datos en memoria hasta que se alcance un umbral especificado, 
+ * y solo entonces lo confirmará en disco. Si el flujo se cierra antes de que se alcance el umbral, 
+ * los datos no se escribirán en disco en absoluto.
  * <p>
- * To build an instance, use {@link Builder}.
+ * Para construir una instancia, use {@link Builder}.
  * </p>
- * <h2>Responsibility for File Cleanup</h2>
+ * <h2>Responsabilidad de Limpieza de Archivo</h2>
  * <p>
- * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) 
- * created by a DeferredFileOutputStream when the caller only configured a prefix.
+ * El llamador es responsable de eliminar el archivo de salida ({@link #getFile()}, {@link #getPath()}) 
+ * creado por DeferredFileOutputStream cuando el llamador solo configuró un prefijo.
  * </p>
  * <p>
- * The caller is responsible for deleting the output file passed to a constructor or builder 
- * through {@link Builder#setOutputFile(File)} or {@link Builder#setOutputFile(Path)}.
+ * El llamador es responsable de eliminar el archivo de salida pasado a un constructor o constructor 
+ * a través de {@link Builder#setOutputFile(File)} o {@link Builder#setOutputFile(Path)}.
  * </p>
- * <h2>Use Case: File Upload Processing</h2>
+ * <h2>Caso de Uso: Procesamiento de Carga de Archivo</h2>
  * <p>
- * This class originated in FileUpload processing to solve the following problem: 
- * when receiving an uploaded file, the size is unknown in advance. Small files should be 
- * stored in memory for speed, while large files should be stored to disk to avoid memory issues. 
- * This class automatically handles this transition at a configurable threshold.
+ * Esta clase se originó en el procesamiento de FileUpload para resolver el siguiente problema:
+ * al recibir un archivo cargado, el tamaño se desconoce por adelantado. Los archivos pequeños deben
+ * almacenarse en memoria para velocidad, mientras que los archivos grandes deben almacenarse en disco
+ * para evitar problemas de memoria. Esta clase maneja automáticamente esta transición en un umbral
+ * configurable.
  * </p>
- * <!-- REFACTOR: Reformatted javadoc with shorter lines for better readability and 
- *      applied section headers for clarity on design decisions -->
+<!-- REFACTOR: Se reformateó javadoc con líneas más cortas para mejor legibilidad y 
+     se aplicaron encabezados de sección para mayor claridad en decisiones de diseño -->
  *
  * @see Builder
  */
@@ -154,23 +169,18 @@ Se ha analizado el código fuente del proyecto Apache Commons IO identificando l
 **ANTES:**
 ```javadoc
 /**
- * Builds a new {@link BOMInputStream}.
+ * Construye un nuevo {@link BOMInputStream}.
  * <p>
- * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+ * Debe configurar un aspecto que soporte {@link #getInputStream()}, de lo contrario, este método lanza una excepción.
  * </p>
- * <p>
- * This builder uses the following aspects: InputStream, OpenOption[], include, and ByteOrderMark[].
- * </p>
- * <p>
- * This builder uses the following aspects:
- * </p>
+ * <h2>Aspectos Utilizados por Este Constructor</h2>
  * <ul>
- * <li>{@link #getInputStream()}</li>
- * <li>include}</li>
- * <li>byteOrderMarks</li>
+ * <li>{@link #getInputStream()} - el flujo de entrada a envolver</li>
+ * <li>include - si incluir el BOM en la salida</li>
+ * <li>byteOrderMarks - los BOMs a detectar y opcionalmente excluir</li>
  * </ul>
  *
- * @return a new instance.
+ * @return una nueva instancia.
  * ...
  */
 ```
@@ -178,23 +188,23 @@ Se ha analizado el código fuente del proyecto Apache Commons IO identificando l
 **DESPUÉS:**
 ```javadoc
 /**
- * Builds a new {@link BOMInputStream}.
+ * Construye un nuevo {@link BOMInputStream}.
  * <p>
- * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method 
- * throws an exception.
+ * Debe configurar un aspecto que soporte {@link #getInputStream()}, de lo contrario, este método 
+ * lanza una excepción.
  * </p>
- * <h2>Aspects Used by This Builder</h2>
+ * <h2>Aspectos Utilizados por Este Constructor</h2>
  * <ul>
- * <li>{@link #getInputStream()} - the input stream to wrap</li>
- * <li>include - whether to include the BOM in the output</li>
- * <li>byteOrderMarks - the BOMs to detect and optionally exclude</li>
+ * <li>{@link #getInputStream()} - el flujo de entrada a envolver</li>
+ * <li>include - si incluir el BOM en la salida</li>
+ * <li>byteOrderMarks - los BOMs a detectar y opcionalmente excluir</li>
  * </ul>
- * <!-- REFACTOR: Removed duplicate documentation and improved clarity by:
- *      1. Reformatting long lines to improve readability
- *      2. Using section headers for organization
- *      3. Removing duplicated "This builder uses the following aspects" paragraph -->
+<!-- REFACTOR: Se eliminó la documentación duplicada y se mejoró la claridad por:
+     1. Reformateo de líneas largas para mejorar legibilidad
+     2. Uso de encabezados de sección para organización
+     3. Eliminación del párrafo duplicado "This builder uses the following aspects" -->
  *
- * @return a new instance.
+ * @return una nueva instancia.
  * ...
  */
 ```
@@ -217,57 +227,57 @@ Se ha analizado el código fuente del proyecto Apache Commons IO identificando l
 **ANTES:**
 ```javadoc
 /**
- * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
+ * Devuelve una versión legible por humanos del tamaño del archivo, donde la entrada representa un número específico de bytes.
  * <p>
- * If the size is over 1GB, the size is returned as the number of whole GB, the size is rounded down to the
- * nearest GB boundary.
+ * Si el tamaño es superior a 1GB, el tamaño se devuelve como el número de GB completos, el tamaño se 
+ * redondea hacia abajo al límite GB más cercano.
  * </p>
  * <p>
- * Similarly for the 1MB and 1KB boundaries.
+ * Similarmente para los límites 1MB y 1KB.
  * </p>
  *
- * @param size the number of bytes.
- * @return a human-readable display value (includes units - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB or bytes).
- * @throws NullPointerException if the given {@link BigInteger} is {@code null}.
- * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
+ * @param size el número de bytes.
+ * @return un valor de visualización legible para humanos (incluye unidades - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB o bytes).
+ * @throws NullPointerException si el {@link BigInteger} dado es {@code null}.
+ * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - ¿debería cambiarse el redondeo?</a>
  * @since 2.4
  */
-// See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
+// Ver https://issues.apache.org/jira/browse/IO-226 - ¿debería cambiarse el redondeo?
 public static String byteCountToDisplaySize(final BigInteger size) {
 ```
 
 **DESPUÉS:**
 ```javadoc
 /**
- * Returns a human-readable version of the file size, where the input represents a specific 
- * number of bytes.
+ * Devuelve una versión legible por humanos del tamaño del archivo, donde la entrada representa un número 
+ * específico de bytes.
  * <p>
- * If the size is over 1GB, the size is returned as the number of whole GB, the size is 
- * rounded down to the nearest GB boundary.
+ * Si el tamaño es superior a 1GB, el tamaño se devuelve como el número de GB completos, el tamaño se 
+ * redondea hacia abajo al límite GB más cercano.
  * </p>
  * <p>
- * Similarly for the 1MB and 1KB boundaries.
+ * Similarmente para los límites 1MB y 1KB.
  * </p>
- * <h2>Implementation Strategy: Cascading Conditions</h2>
+ * <h2>Estrategia de Implementación: Condiciones en Cascada</h2>
  * <p>
- * This method uses cascading if-else statements rather than a loop because:
+ * Este método usa sentencias if-else en cascada en lugar de un bucle porque:
  * <ul>
- * <li><strong>Performance:</strong> The number of units is fixed (8 levels from bytes to quettabytes),
- *     making explicit conditions faster than dynamic calculations.</li>
- * <li><strong>Predictability:</strong> Most files fall into a few common categories (bytes, KB, MB, GB),
- *     so branch prediction favors this approach.</li>
+ * <li><strong>Rendimiento:</strong> El número de unidades es fijo (8 niveles de bytes a quettabytes),
+ *     lo que hace que las condiciones explícitas sean más rápidas que los cálculos dinámicos.</li>
+ * <li><strong>Previsibilidad:</strong> La mayoría de los archivos caen en pocas categorías comunes (bytes, KB, MB, GB),
+ *     por lo que la predicción de rama favorece este enfoque.</li>
  * </ul>
  * </p>
  *
- * @param size the number of bytes.
- * @return a human-readable display value (includes units - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB or bytes).
- * @throws NullPointerException if the given {@link BigInteger} is {@code null}.
- * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
+ * @param size el número de bytes.
+ * @return un valor de visualización legible para humanos (incluye unidades - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB o bytes).
+ * @throws NullPointerException si el {@link BigInteger} dado es {@code null}.
+ * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - ¿debería cambiarse el redondeo?</a>
  * @since 2.4
- * <!-- REFACTOR: Expanded javadoc with design rationale explaining why cascading conditions 
- *      are used instead of loops, improving maintainability and code understanding -->
+<!-- REFACTOR: Se expandió javadoc con la justificación de diseño explicando por qué se usan 
+     condiciones en cascada en lugar de bucles, mejorando mantenibilidad y comprensión del código -->
  */
-// See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
+// Ver https://issues.apache.org/jira/browse/IO-226 - ¿debería cambiarse el redondeo?
 public static String byteCountToDisplaySize(final BigInteger size) {
 ```
 
@@ -296,17 +306,17 @@ private static int getNanosOfMilli(final Duration duration) {
 **DESPUÉS:**
 ```java
 /**
- * Extracts the nanosecond component within the millisecond part of a duration.
+ * Extrae el componente de nanosegundo dentro de la parte de milisegundo de una duración.
  * <p>
- * For a duration like 2.5 milliseconds (2500000 nanoseconds), this method returns 500000 
- * (the nanoseconds beyond the millisecond boundary). This is used by the sleep method to 
- * preserve sub-millisecond precision when passing arguments to {@link Thread#sleep(long, int)}.
+ * Para una duración como 2.5 milisegundos (2500000 nanosegundos), este método devuelve 500000 
+ * (los nanosegundos más allá del límite del milisegundo). El método sleep lo usa para 
+ * preservar precisión sub-milisegundo al pasar argumentos a {@link Thread#sleep(long, int)}.
  * </p>
- * <!-- REFACTOR: Added javadoc to undocumented helper method explaining its purpose
- *      and why it's needed for precise sleep timing -->
+<!-- REFACTOR: Se añadió javadoc al método auxiliar no documentado explicando su propósito
+     y por qué es necesario para temporizaciones de sleep precisas -->
  *
- * @param duration the duration to extract nanoseconds from.
- * @return nanoseconds beyond the millisecond boundary (0-999999 range).
+ * @param duration la duración de la que extraer nanosegundos.
+ * @return nanosegundos más allá del límite de milisegundo (rango 0-999999).
  */
 private static int getNanosOfMilli(final Duration duration) {
     return duration.getNano() % 1_000_000;
@@ -331,18 +341,18 @@ private static int getNanosOfMilli(final Duration duration) {
 **ANTES:**
 ```java
 try {
-    // Use the JVM elapsed time, avoids issues with DST changes and manual OS time changes.
+    // Usar el tiempo transcurrido de la JVM, evita problemas con cambios DST y cambios de hora manual del SO.
     final long nanoStart = System.nanoTime();
-    final long finishNanos = nanoStart + duration.toNanos(); // toNanos(): Possible ArithmeticException, otherwise wrap around OK.
+    final long finishNanos = nanoStart + duration.toNanos(); // toNanos(): Posible ArithmeticException, de lo contrario wrap around OK.
     Duration remainingDuration = duration;
     long nowNano;
     do {
         Thread.sleep(remainingDuration.toMillis(), getNanosOfMilli(remainingDuration));
         nowNano = System.nanoTime();
         remainingDuration = Duration.ofNanos(finishNanos - nowNano);
-    } while (nowNano - finishNanos < 0); // handles wrap around, see Thread#sleep(long, int).
+    } while (nowNano - finishNanos < 0); // maneja wrap around, ver Thread#sleep(long, int).
 } catch (final ArithmeticException e) {
-    // Use the current time
+    // Usar la hora actual del reloj de pared
     final Instant finishInstant = Instant.now().plus(duration);
     Duration remainingDuration = duration;
     do {
@@ -354,11 +364,11 @@ try {
 
 **DESPUÉS:**
 ```java
-// PRIMARY STRATEGY: Use JVM elapsed time via System.nanoTime()
-// This avoids issues with DST changes and manual OS time changes
+// ESTRATEGIA PRIMARIA: Usar tiempo transcurrido de la JVM mediante System.nanoTime()
+// Esto evita problemas con cambios DST y cambios manuales de hora del SO
 try {
     final long nanoStart = System.nanoTime();
-    // toNanos(): Possible ArithmeticException on very large durations (wrap around is OK)
+    // toNanos(): Posible ArithmeticException en duraciones muy grandes (wrap around es OK)
     final long finishNanos = nanoStart + duration.toNanos();
     Duration remainingDuration = duration;
     long nowNano;
@@ -368,8 +378,8 @@ try {
         remainingDuration = Duration.ofNanos(finishNanos - nowNano);
     } while (nowNano - finishNanos < 0); // handles wrap around, see Thread#sleep(long, int)
 } catch (final ArithmeticException e) {
-    // FALLBACK STRATEGY: Use wall-clock time via Instant.now() when nanoTime overflows
-    // This handles extremely large durations where toNanos() would overflow
+    // ESTRATEGIA DE RESPALDO: Usar tiempo de reloj de pared mediante Instant.now() cuando nanoTime se desborda
+    // Esto maneja duraciones extremadamente grandes donde toNanos() se desbordaría
     final Instant finishInstant = Instant.now().plus(duration);
     Duration remainingDuration = duration;
     do {
@@ -397,14 +407,15 @@ try {
 **ANTES:**
 ```javadoc
 /**
- * Sleeps for a guaranteed minimum duration unless interrupted.
+ * Duerme durante una duración mínima garantizada a menos que sea interrumpido.
  * <p>
- * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate. Read
- * {@link Thread#sleep(long, int)}} for further interesting details.
+ * Este método existe porque {@link Thread#sleep(long)} puede dormir 0, 70, 100 o 200ms 
+ * o cualquier otra duración que el planificador del SO considere apropiada. Lee {@link Thread#sleep(long, int)} 
+ * para más detalles interesantes.
  * </p>
  *
- * @param duration the sleep duration.
- * @throws InterruptedException if interrupted.
+ * @param duration la duración del sleep.
+ * @throws InterruptedException si es interrumpido.
  * @see Thread#sleep(long, int)
  */
 ```
@@ -412,29 +423,29 @@ try {
 **DESPUÉS:**
 ```javadoc
 /**
- * Sleeps for a guaranteed minimum duration unless interrupted.
+ * Duerme por una duración mínima garantizada a menos que sea interrumpido.
  * <p>
- * This method exists because {@link Thread#sleep(long)} can sleep for 0, 70, 100, or 200ms 
- * or any other duration the OS scheduler deems appropriate. Read {@link Thread#sleep(long, int)} 
- * for further interesting details.
+ * Este método existe porque {@link Thread#sleep(long)} puede dormir 0, 70, 100 o 200ms 
+ * o cualquier otra duración que el planificador del SO considere apropiada. Lee {@link Thread#sleep(long, int)} 
+ * para más detalles interesantes.
  * </p>
- * <h2>Implementation Strategy: Looping Until Target Time</h2>
+ * <h2>Estrategia de Implementación: Bucle Hasta Hora Objetivo</h2>
  * <p>
- * Rather than trusting a single sleep call, this method loops and recalculates the remaining  
- * duration after each sleep cycle. This ensures the thread sleeps for at least the requested 
- * duration by accounting for OS scheduler inaccuracies:
+ * En lugar de confiar en una única llamada de sleep, este método hace bucles y recalcula la duración restante  
+ * después de cada ciclo de sleep. Esto asegura que el hilo duerma al menos la duración solicitada 
+ * contabilizando las imprecisiones del planificador del SO:
  * <ul>
- * <li><strong>Primary approach:</strong> Uses {@code System.nanoTime()} which is monotonic and 
- *     immune to system clock adjustments (DST changes, manual time corrections).</li>
- * <li><strong>Fallback approach:</strong> Uses {@code Instant.now()} if nanoTime calculation 
- *     causes overflow (very large durations).</li>
+ * <li><strong>Enfoque primario:</strong> Usa {@code System.nanoTime()} que es monótono e 
+ *     inmune a ajustes del reloj del sistema (cambios DST, correcciones de hora manual).</li>
+ * <li><strong>Enfoque de respaldo:</strong> Usa {@code Instant.now()} si el cálculo de nanoTime 
+ *     causa desbordamiento (duraciones muy grandes).</li>
  * </ul>
  * </p>
- * <!-- REFACTOR: Expanded javadoc to explain the design decision of looping over single sleep,
- *      documented the two strategies for time calculation, and clarified why each is necessary -->
+<!-- REFACTOR: Se expandió javadoc para explicar la decisión de diseño de hacer bucles sobre sleep único,
+     se documentaron las dos estrategias de cálculo de tiempo, y se aclaró por qué cada una es necesaria -->
  *
- * @param duration the sleep duration.
- * @throws InterruptedException if interrupted.
+ * @param duration la duración del sleep.
+ * @throws InterruptedException si es interrumpido.
  * @see Thread#sleep(long, int)
  */
 ```
@@ -475,25 +486,25 @@ private int bufferSizeMax = DEFAULT_MAX_VALUE;
 **DESPUÉS:**
 ```java
 /**
- * The current buffer size requested by the user.
- * Defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
- * <!-- REFACTOR: Clarified that this is the CURRENT/REQUESTED buffer size, distinct from bufferSizeDefault -->
+ * Tamaño actual de búfer solicitado por el usuario.
+ * Por defecto es {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+ * <!-- REFACTOR: Se aclaró que este es el tamaño de búfer ACTUAL/SOLICITADO, distinto de bufferSizeDefault -->
  */
 private int bufferSize = IOUtils.DEFAULT_BUFFER_SIZE;
 
 /**
- * The default buffer size used when no explicit size is configured.
- * Defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
- * This is the fallback value when bufferSize is not explicitly set.
- * <!-- REFACTOR: Clarified that this is the DEFAULT buffer size, explaining its purpose as fallback -->
+ * Tamaño de búfer por defecto usado cuando no se configura un tamaño explícito.
+ * Por defecto es {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+ * Este es el valor de respaldo cuando bufferSize no se establece explícitamente.
+ * <!-- REFACTOR: Se aclaró que este es el tamaño de búfer POR DEFECTO, explicando su propósito como respaldo -->
  */
 private int bufferSizeDefault = IOUtils.DEFAULT_BUFFER_SIZE;
 
 /**
- * The maximum allowed buffer size to prevent memory abuse.
- * Defaults to {@link Integer#MAX_VALUE}.
- * This constraint is enforced by {@link #bufferSizeChecker}.
- * <!-- REFACTOR: Clarified the purpose and added reference to enforcement mechanism -->
+ * Tamaño máximo de búfer permitido para prevenir abuso de memoria.
+ * Por defecto es {@link Integer#MAX_VALUE}.
+ * Esta restricción es cumplida por {@link #bufferSizeChecker}.
+ * <!-- REFACTOR: Se aclaró el propósito y se añadió referencia al mecanismo de cumplimiento -->
  */
 private int bufferSizeMax = DEFAULT_MAX_VALUE;
 ```
@@ -860,6 +871,7 @@ grep -r "REFACTOR" src/main/java/org/apache/commons/io/ | wc -l
 
 ---
 
+**Última actualización:** 8 de mayo de 2026  
 **Estado:** ✅ **Semana 2 Completada Satisfactoriamente**  
 **Calidad:** 🌟🌟🌟🌟🌟 Exhaustivo y Bien Documentado  
 **Próxima:** Semana 3 - Reglas de Funciones

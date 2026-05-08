@@ -455,7 +455,7 @@ public class WriterOutputStream extends OutputStream {
     public void write(final byte[] b, int off, int len) throws IOException {
         IOUtils.checkFromIndexSize(b, off, len);
         while (len > 0) {
-            // REFACTOR: Renamed 'c' to 'bytesToEncode' to clearly indicate bytes we'll encode this iteration
+            // REFACTOR: Se renombró 'c' a 'bytesToEncode' para indicar claramente los bytes que codificaremos esta iteración
             final int bytesToEncode = Math.min(len, decoderIn.remaining());
             decoderIn.put(b, off, bytesToEncode);
             processInput(false);

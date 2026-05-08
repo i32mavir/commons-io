@@ -218,7 +218,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         final byte[] newBuf = IOUtils.byteArray(remaining);
         int pos = 0;
         for (final byte[] buf : buffers) {
-            // REFACTOR: Renamed 'c' to 'bytesToCopy' to reveal intent clearly
+            // REFACTOR: Se renombró 'c' a 'bytesToCopy' para revelar la intención claramente
             final int bytesToCopy = Math.min(buf.length, remaining);
             System.arraycopy(buf, 0, newBuf, pos, bytesToCopy);
             pos += bytesToCopy;
@@ -265,7 +265,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         }
         final List<S> list = new ArrayList<>(buffers.size());
         for (final byte[] buf : buffers) {
-            // REFACTOR: Renamed 'c' to 'bytesToInclude' to show intent as count of bytes for input constructor
+            // REFACTOR: Se renombró 'c' a 'bytesToInclude' para mostrar la intención como cantidad de bytes para constructor
             final int bytesToInclude = Math.min(buf.length, remaining);
             list.add(isConstructor.construct(buf, 0, bytesToInclude));
             remaining -= bytesToInclude;
